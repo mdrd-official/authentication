@@ -1,41 +1,39 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Signup from "./components/SignUp";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Profile from "./pages/Profile";
+import LoginAdmin from "./pages/LoginAdmin";
+import AdminDashboard from "./pages/AdminDashboard";
+import { useSelector } from "react-redux";
+import EditUserForm from "./pages/EditUserForm";
+import AddUserForm from "./pages/AddUserForm";
+
+
+
 
 function App() {
+  const { isAuthenticated } = useSelector((state) => state.adminAuth); 
   return (
-    <Router>
-      <div className="App">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <Link to="/" className="navbar-brand">
-            Home
-          </Link>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to="/login" className="nav-link">
-                  Login
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/signup" className="nav-link">
-                  Signup
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </div>
-    </Router>
+    <>
+      {!isAuthenticated ? <Navbar />: null }
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/admin-login" element={<LoginAdmin />} />
+        <Route path="/dashboard" element={<AdminDashboard />} />
+        <Route path="/edit-user/:id" element={<EditUserForm />} />
+        <Route path="/add-user" element={<AddUserForm />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="*" element={<h1>Not Found</h1>} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
 
